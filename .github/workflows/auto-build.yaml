@@ -1,6 +1,9 @@
 name: Auto build images Actions
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push] #event trigger pipeline
+# on:
+#   push:
+#     branches: master
 jobs:
   build-image:
     runs-on: ubuntu-latest
@@ -18,11 +21,18 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      -
-        name: Build and push
-        uses: docker/build-push-action@v3
+      - 
+        name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+      - 
+        name: Build and push Docker images
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: ${{ github.repository_owner }}/docker-ci:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
