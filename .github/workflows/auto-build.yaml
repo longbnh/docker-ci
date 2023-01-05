@@ -1,5 +1,5 @@
 name: Auto build images Actions
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} is build on GitHub Actions 🚀
 on: [push] #event trigger pipeline
 # on:
 #   push:
@@ -34,5 +34,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: latest
+          # labels: ${{ steps.meta.outputs.labels }}
